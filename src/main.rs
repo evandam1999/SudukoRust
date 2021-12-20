@@ -37,32 +37,30 @@ fn main() {
                 //is this guess any good?
                 let curidx_valid_row = valid_row(get_row(curidx), &solution);
                 let curidx_valid_col = valid_col(get_col(curidx), &solution);                
-                if  !curidx_valid_row || 
-                    !curidx_valid_col ||
-                    !valid_grid(get_grid(curidx), &solution) {
-                        //guess is NO good
-                        //println!("{} is no good: blk: {}", n, k);
-                        if n == 9 {
-                            guess_from = 10;
-                            while guess_from > 9 {
-                                solution[curidx] = 0;
-                                let prev = previdx.pop();
-                                curidx = prev.unwrap().0 as usize;
-                                guess_from = prev.unwrap().1 as u32 + 1;
-                                //println!("new curidx:{}, guessfrom:{}", curidx, guess_from);
-                            }
-                            break 'guess;
+                if  !curidx_valid_row || !curidx_valid_col || !valid_grid(get_grid(curidx), &solution) {
+                    //guess is NOT valid                        
+                    if n == 9 {
+                        guess_from = 10;
+                        while guess_from > 9 {
+                            solution[curidx] = 0;
+                            let prev = previdx.pop();
+                            curidx = prev.unwrap().0 as usize;
+                            guess_from = prev.unwrap().1 as u32 + 1;
+                            //println!("new curidx:{}, guessfrom:{}", curidx, guess_from);
                         }
-                        else {                            
-                            continue 'guess;
-                        }
-                    }                
-                //guess is good                
-                previdx.push((curidx,n));
-                curidx = curidx+1;
-                guess_from = 1;
-                //println!("good guess moving on");
-                break 'guess;
+                        break 'guess;
+                    }
+                    else {                            
+                        continue 'guess;
+                    }
+                } else {
+                    //guess is valid
+                    previdx.push((curidx,n));
+                    curidx = curidx+1;
+                    guess_from = 1;
+                    //println!("good guess moving on");
+                    break 'guess;
+                }   
             }
         }        
     }
